@@ -17,6 +17,7 @@
 
 #include "common_setup.h"
 #include "clock_init.h"
+#include <debug_uart.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -185,7 +186,7 @@ void copy_uboot_to_ram(void)
 	unsigned int bootmode = BOOT_MODE_OM;
 
 	u32 (*copy_bl2)(u32 offset, u32 nblock, u32 dst) = NULL;
-	u32 offset = 0, size = 0;
+	//u32 offset = 0, size = 0;
 #ifdef CONFIG_SPI_BOOTING
 	struct spl_machine_param *param = spl_get_machine_params();
 #endif
@@ -221,14 +222,14 @@ void copy_uboot_to_ram(void)
 		break;
 #endif
 	case BOOT_MODE_SD:
-		offset = BL2_START_OFFSET;
-		size = BL2_SIZE_BLOC_COUNT;
+		//offset = BL2_START_OFFSET;
+		//size = BL2_SIZE_BLOC_COUNT;
 		copy_bl2 = get_irom_func(MMC_INDEX);
 		break;
 #ifdef CONFIG_SUPPORT_EMMC_BOOT
 	case BOOT_MODE_EMMC:
 		/* Set the FSYS1 clock divisor value for EMMC boot */
-		emmc_boot_clk_div_set();
+		//emmc_boot_clk_div_set();
 
 		copy_bl2_from_emmc = get_irom_func(EMMC44_INDEX);
 		end_bootop_from_emmc = get_irom_func(EMMC44_END_INDEX);
@@ -254,7 +255,24 @@ void copy_uboot_to_ram(void)
 	}
 
 	if (copy_bl2)
-		copy_bl2(offset, size, CONFIG_SYS_TEXT_BASE);
+		//copy_bl2(offset, size, CONFIG_SYS_TEXT_BASE);
+        {
+                unsigned int i , count = 0;
+                unsigned char *buffer = (unsigned char *)0x02050000;
+                unsigned char *dst = (unsigned char *)CONFIG_SYS_TEXT_BASE;
+                unsigned int step = (0x10000 / 512);
+
+                for (count = 0; count < BL2_SIZE_BLOC_COUNT; count += step)
+                {
+                        copy_bl2((u32)(BL2_START_OFFSET+count), (u32)step, (u32)buffer);
+
+                        for (i = 0; i < 0x10000; i++)
+                        {
+                                *dst++ = buffer[i];
+                        }
+                }
+                printascii("copy_uboot_to_ram done! \n");
+        }
 }
 
 void memzero(void *s, size_t n)

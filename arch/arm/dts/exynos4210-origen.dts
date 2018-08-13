@@ -15,12 +15,13 @@
 	compatible = "insignal,origen", "samsung,exynos4210";
 
 	chosen {
+		stdout-path = "serial0";
 		bootargs ="";
 	};
 
 	aliases {
 		serial0 = "/serial@13800000";
-		console = "/serial@13820000";
+		console = "/serial@13800000";
 	};
 };
 

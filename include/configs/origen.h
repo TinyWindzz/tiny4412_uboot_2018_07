@@ -46,7 +46,7 @@
 
 /* MMC SPL */
 #define COPY_BL2_FNPTR_ADDR	0x02020030
-#define CONFIG_SPL_TEXT_BASE	0x02021410
+#define CONFIG_SPL_TEXT_BASE	0x02023400
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"loadaddr=0x40007000\0" \
@@ -87,8 +87,9 @@
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #define CONFIG_ENV_SIZE			(16 << 10)	/* 16 KB */
 #define RESERVE_BLOCK_SIZE		(512)
-#define BL1_SIZE			(16 << 10) /*16 K reserved for BL1*/
-#define CONFIG_ENV_OFFSET		(RESERVE_BLOCK_SIZE + BL1_SIZE)
+#define BL1_SIZE			(8 << 10)	/*8 K reserved for BL1*/
+#define BL2_SIZE			(16 << 10)	/*16 K reserved for BL2*/
+#define CONFIG_ENV_OFFSET		(RESERVE_BLOCK_SIZE + BL1_SIZE + BL2_SIZE)
 
 #define CONFIG_SPL_MAX_FOOTPRINT	(14 * 1024)
 
@@ -98,5 +99,13 @@
 #define COPY_BL2_SIZE		0x80000
 #define BL2_START_OFFSET	((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
 #define BL2_SIZE_BLOC_COUNT	(COPY_BL2_SIZE/512)
+
+/* uart0 debug for spl */
+#define CONFIG_SPL_SERIAL_SUPPORT
+#define CONFIG_SPL_GPIO_SUPPORT
+#define CONFIG_DEBUG_UART
+#define CONFIG_DEBUG_UART_S5P
+#define CONFIG_DEBUG_UART_BASE 0x13800000    /* UART0 base address  */
+#define CONFIG_DEBUG_UART_CLOCK (100000000)    /* SCLK_UART0 is 100MHz  */
 
 #endif	/* __CONFIG_H */
