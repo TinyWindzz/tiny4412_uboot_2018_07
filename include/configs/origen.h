@@ -63,21 +63,10 @@
         "bootscript=echo Running bootscript from mmc${mmcdev} ...; " \
                 "source ${loadaddr}\0"
 #define CONFIG_BOOTCOMMAND \
-	"if mmc rescan; then " \
-		"echo SD/MMC found on device ${mmcdev};" \
-		"if run loadbootenv; then " \
-			"echo Loaded environment from ${bootenv};" \
-			"run importbootenv;" \
-		"fi;" \
-		"if test -n $uenvcmd; then " \
-			"echo Running uenvcmd ...;" \
-			"run uenvcmd;" \
-		"fi;" \
-		"if run loadbootscript; then " \
-			"run bootscript; " \
-		"fi; " \
-	"fi;" \
-	"load mmc ${mmcdev} ${loadaddr} uImage; bootm ${loadaddr} "
+	"load mmc 0 0x40007000 uImage;" \
+	"load mmc 0 0x48000000 ramdisk.img;" \
+	"load mmc 0 0x42000000 exynos4412-tiny4412.dtb;" \
+	"bootm 0x40007000 0x48000000 0x42000000"
 
 #define CONFIG_CLK_1000_400_200
 
