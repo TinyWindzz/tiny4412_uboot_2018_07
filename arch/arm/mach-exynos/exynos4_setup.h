@@ -1,384 +1,16 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
 /*
  * Machine Specific Values for EXYNOS4012 based board
  *
  * Copyright (C) 2011 Samsung Electronics
- *
- * SPDX-License-Identifier:	GPL-2.0+
  */
 
-/*
 #ifndef _ORIGEN_SETUP_H
 #define _ORIGEN_SETUP_H
-*/
 
-/* 不确定这样更改是否有问题，先改着 */
-#ifndef __TINY4412_SETUP__
-#define __TINY4412_SETUP__
+#include <config.h>
+#include <asm/arch/cpu.h>
 
-/* A/M PLL_CON0 */
-#define SDIV(x)                 ((x) & 0x7)
-#define PDIV(x)                 (((x) & 0x3f) << 8)
-#define MDIV(x)                 (((x) & 0x3ff) << 16)
-#define FSEL(x)                 (((x) & 0x1) << 27)
-#define PLL_LOCKED_BIT          (0x1 << 29)
-#define PLL_ENABLE(x)           (((x) & 0x1) << 31)
-
-/* A/M PLL_CON1 */
-#define AFC(x)                 ((x) & 0xf)
-#define LOCK_CON_DLY(x)        (((x) & 0xf) << 8)
-#define LOCK_CON_IN(x)        (((x) & 0x3) << 12)
-#define LOCK_CON_OUT(x)        (((x) & 0x3) << 14)
-#define FEED_EN(x)        (((x) & 0x1) << 16)
-#define AFC_ENB(x)        (((x) & 0x1) << 20)
-#define DCC_ENB(x)        (((x) & 0x1) << 21)
-#define BYPASS(x)        (((x) & 0x1) << 22)
-#define RESV0(x)        (((x) & 0x1) << 23)
-#define RESV1(x)        (((x) & 0x1) << 24)
-
-/* E/V PLL_CON1 */
-#define K(x)                 ((x) & 0xffff)
-#define MFR(x)        (((x) & 0xff) << 16)
-#define MRR(x)        (((x) & 0x1f) << 24)
-#define SEL_PF(x)        (((x) & 0x3) << 9)
-
-/* E/V PLL_CON2 */
-#define ICP_BOOST(x)    ((x) & 0x3)
-#define FSEL_E_V(x)        (((x) & 0x1) << 2)
-#define FVCO_EN(x)        (((x) & 0x1) << 3)
-#define BYPASS_E_V(x)        (((x) & 0x1) << 4)
-#define SSCG_EN(x)        (((x) & 0x1) << 5)
-#define AFC_ENB_E_V(x)        (((x) & 0x1) << 6)
-#define DCC_ENB_E_V(x)        (((x) & 0x1) << 7)
-#define EXTAFC(x)        (((x) & 0x1f) << 8)
-
-#define PLL_LOCKTIME(x)	((x) & 0xffff)
-
-
-/* CLK_SRC_CPU */
-#define MUX_APLL_SEL(x)         ((x) & 0x1)
-#define MUX_CORE_SEL(x)         (((x) & 0x1) << 16)
-#define MUX_HPM_SEL(x)          (((x) & 0x1) << 20)
-#define MUX_MPLL_USER_SEL_C(x)  (((x) & 0x1) << 24)
-
-#define MUX_STAT_CHANGING       0x100
-
-/* CLK_MUX_STAT_CPU */
-#define APLL_SEL(x)             ((x) & 0x7)
-#define CORE_SEL(x)             (((x) & 0x7) << 16)
-#define HPM_SEL(x)              (((x) & 0x7) << 20)
-#define MPLL_USER_SEL_C(x)      (((x) & 0x7) << 24)
-#define MUX_STAT_CPU_CHANGING   (APLL_SEL(MUX_STAT_CHANGING) | \
-				CORE_SEL(MUX_STAT_CHANGING) | \
-				HPM_SEL(MUX_STAT_CHANGING) | \
-				MPLL_USER_SEL_C(MUX_STAT_CHANGING))
-
-/* CLK_DIV_CPU0 */
-#define CORE_RATIO(x)           ((x) & 0x7)
-#define COREM0_RATIO(x)         (((x) & 0x7) << 4)
-#define COREM1_RATIO(x)         (((x) & 0x7) << 8)
-#define PERIPH_RATIO(x)         (((x) & 0x7) << 12)
-#define ATB_RATIO(x)            (((x) & 0x7) << 16)
-#define PCLK_DBG_RATIO(x)       (((x) & 0x7) << 20)
-#define APLL_RATIO(x)           (((x) & 0x7) << 24)
-#define CORE2_RATIO(x)          (((x) & 0x7) << 28)
-
-/* CLK_DIV_STAT_CPU0 */
-#define DIV_CORE(x)             ((x) & 0x1)
-#define DIV_COREM0(x)           (((x) & 0x1) << 4)
-#define DIV_COREM1(x)           (((x) & 0x1) << 8)
-#define DIV_PERIPH(x)           (((x) & 0x1) << 12)
-#define DIV_ATB(x)              (((x) & 0x1) << 16)
-#define DIV_PCLK_DBG(x)         (((x) & 0x1) << 20)
-#define DIV_APLL(x)             (((x) & 0x1) << 24)
-#define DIV_CORE2(x)            (((x) & 0x1) << 28)
-
-#define DIV_STAT_CHANGING       0x1
-#define DIV_STAT_CPU0_CHANGING  (DIV_CORE(DIV_STAT_CHANGING) | \
-				DIV_COREM0(DIV_STAT_CHANGING) | \
-				DIV_COREM1(DIV_STAT_CHANGING) | \
-				DIV_PERIPH(DIV_STAT_CHANGING) | \
-				DIV_ATB(DIV_STAT_CHANGING) | \
-				DIV_PCLK_DBG(DIV_STAT_CHANGING) | \
-				DIV_APLL(DIV_STAT_CHANGING) | \
-				DIV_CORE2(DIV_STAT_CHANGING))
-
-/* CLK_DIV_CPU1 */
-#define COPY_RATIO(x)           ((x) & 0x7)
-#define HPM_RATIO(x)            (((x) & 0x7) << 4)
-#define CORES_RATIO(x)          (((x) & 0x7) << 8)
-
-/* CLK_DIV_STAT_CPU1 */
-#define DIV_COPY(x)             ((x) & 0x7)
-#define DIV_HPM(x)              (((x) & 0x1) << 4)
-#define DIV_CORES(x)            (((x) & 0x1) << 8)
-
-#define DIV_STAT_CPU1_CHANGING	(DIV_COPY(DIV_STAT_CHANGING) | \
-				DIV_HPM(DIV_STAT_CHANGING) | \
-				DIV_CORES(DIV_STAT_CHANGING))
-
-/* CLK_SRC_DMC */
-#define MUX_C2C_SEL(x)		((x) & 0x1)
-#define MUX_DMC_BUS_SEL(x)	(((x) & 0x1) << 4)
-#define MUX_DPHY_SEL(x)		(((x) & 0x1) << 8)
-#define MUX_MPLL_SEL(x)		(((x) & 0x1) << 12)
-#define MUX_PWI_SEL(x)		(((x) & 0xf) << 16)
-#define MUX_G2D_ACP0_SEL(x)	(((x) & 0x1) << 20)
-#define MUX_G2D_ACP1_SEL(x)	(((x) & 0x1) << 24)
-#define MUX_G2D_ACP_SEL(x)	(((x) & 0x1) << 28)
-
-/* CLK_MUX_STAT_DMC */
-#define C2C_SEL(x)		(((x)) & 0x7)
-#define DMC_BUS_SEL(x)		(((x) & 0x7) << 4)
-#define DPHY_SEL(x)		(((x) & 0x7) << 8)
-#define MPLL_SEL(x)		(((x) & 0x7) << 12)
-/* #define PWI_SEL(x)		(((x) & 0xf) << 16)  - Reserved */
-#define G2D_ACP0_SEL(x)		(((x) & 0x7) << 20)
-#define G2D_ACP1_SEL(x)		(((x) & 0x7) << 24)
-#define G2D_ACP_SEL(x)		(((x) & 0x7) << 28)
-
-#define MUX_STAT_DMC_CHANGING	(C2C_SEL(MUX_STAT_CHANGING) | \
-				DMC_BUS_SEL(MUX_STAT_CHANGING) | \
-				DPHY_SEL(MUX_STAT_CHANGING) | \
-				MPLL_SEL(MUX_STAT_CHANGING) |\
-				G2D_ACP0_SEL(MUX_STAT_CHANGING) | \
-				G2D_ACP1_SEL(MUX_STAT_CHANGING) | \
-				G2D_ACP_SEL(MUX_STAT_CHANGING))
-
-/* CLK_DIV_DMC0 */
-#define ACP_RATIO(x)		((x) & 0x7)
-#define ACP_PCLK_RATIO(x)	(((x) & 0x7) << 4)
-#define DPHY_RATIO(x)		(((x) & 0x7) << 8)
-#define DMC_RATIO(x)		(((x) & 0x7) << 12)
-#define DMCD_RATIO(x)		(((x) & 0x7) << 16)
-#define DMCP_RATIO(x)		(((x) & 0x7) << 20)
-
-/* CLK_DIV_STAT_DMC0 */
-#define DIV_ACP(x)		((x) & 0x1)
-#define DIV_ACP_PCLK(x)		(((x) & 0x1) << 4)
-#define DIV_DPHY(x)		(((x) & 0x1) << 8)
-#define DIV_DMC(x)		(((x) & 0x1) << 12)
-#define DIV_DMCD(x)		(((x) & 0x1) << 16)
-#define DIV_DMCP(x)		(((x) & 0x1) << 20)
-
-#define DIV_STAT_DMC0_CHANGING	(DIV_ACP(DIV_STAT_CHANGING) | \
-				DIV_ACP_PCLK(DIV_STAT_CHANGING) | \
-				DIV_DPHY(DIV_STAT_CHANGING) | \
-				DIV_DMC(DIV_STAT_CHANGING) | \
-				DIV_DMCD(DIV_STAT_CHANGING) | \
-				DIV_DMCP(DIV_STAT_CHANGING))
-
-/* CLK_DIV_DMC1 */
-#define G2D_ACP_RATIO(x)	((x) & 0xf)
-#define C2C_RATIO(x)		(((x) & 0x7) << 4)
-#define PWI_RATIO(x)		(((x) & 0xf) << 8)
-#define C2C_ACLK_RATIO(x)	(((x) & 0x7) << 12)
-#define DVSEM_RATIO(x)		(((x) & 0x7f) << 16)
-#define DPM_RATIO(x)		(((x) & 0x7f) << 24)
-
-/* CLK_DIV_STAT_DMC1 */
-#define DIV_G2D_ACP(x)		((x) & 0x1)
-#define DIV_C2C(x)		(((x) & 0x1) << 4)
-#define DIV_PWI(x)		(((x) & 0x1) << 8)
-#define DIV_C2C_ACLK(x)		(((x) & 0x1) << 12)
-#define DIV_DVSEM(x)		(((x) & 0x1) << 16)
-#define DIV_DPM(x)		(((x) & 0x1) << 24)
-
-#define DIV_STAT_DMC1_CHANGING	(DIV_G2D_ACP(DIV_STAT_CHANGING) | \
-				DIV_C2C(DIV_STAT_CHANGING) | \
-				DIV_PWI(DIV_STAT_CHANGING) | \
-				DIV_C2C_ACLK(DIV_STAT_CHANGING) | \
-				DIV_DVSEM(DIV_STAT_CHANGING) | \
-				DIV_DPM(DIV_STAT_CHANGING))
-
-/* CLK_DIV_TOP */
-#define	ACLK_400_MCUISP_RATIO(x)	(((x) & 0x7) << 24)
-#define	ACLK_266_GPS_RATIO(x)	(((x) & 0x7) << 20)
-#define	ONENAND_RATIO(x)	(((x) & 0x7) << 16)
-#define	ACLK_133_RATIO(x)	(((x) & 0x7) << 12)
-#define ACLK_160_RATIO(x)	(((x) & 0x7) << 8)
-#define ACLK_100_RATIO(x)	(((x) & 0xf) << 4)
-#define ACLK_200_RATIO(x)	((x) & 0x7)
-
-#define DIV_STAT_TOP_CHANGING	(ACLK_400_MCUISP_RATIO(DIV_STAT_CHANGING) | \
-				ACLK_266_GPS_RATIO(DIV_STAT_CHANGING) | \
-				ONENAND_RATIO(DIV_STAT_CHANGING) | \
-				ACLK_133_RATIO(DIV_STAT_CHANGING) | \
-				ACLK_160_RATIO(DIV_STAT_CHANGING) | \
-				ACLK_100_RATIO(DIV_STAT_CHANGING) | \
-				ACLK_200_RATIO(DIV_STAT_CHANGING))
-
-/* CLK_SRC_TOP0 */
-#define MUX_ONENAND_SEL(x)		(((x) & 0x1) << 28)
-#define MUX_ACLK_133_SEL(x)		(((x) & 0x1) << 24)
-#define MUX_ACLK_160_SEL(x)		(((x) & 0x1) << 20)
-#define MUX_ACLK_100_SEL(x)		(((x) & 0x1) << 16)
-#define MUX_ACLK_200_SEL(x)		(((x) & 0x1) << 12)
-#define MUX_VPLL_SEL(x)		(((x) & 0x1) << 8)
-#define MUX_EPLL_SEL(x)		(((x) & 0x1) << 4)
-#define MUX_ONENAND_1_SEL(x)	((x) & 0x1)
-
-/* CLK_MUX_STAT_TOP */
-#define ONENAND_SEL(x)		(((x) & 0x3) << 28)
-#define ACLK_133_SEL(x)		(((x) & 0x3) << 24)
-#define ACLK_160_SEL(x)		(((x) & 0x3) << 20)
-#define ACLK_100_SEL(x)		(((x) & 0x3) << 16)
-#define ACLK_200_SEL(x)		(((x) & 0x3) << 12)
-#define VPLL_SEL(x)		(((x) & 0x3) << 8)
-#define EPLL_SEL(x)		(((x) & 0x3) << 4)
-#define ONENAND_1_SEL(x)	((x) & 0x3)
-
-/* CLK_SRC_TOP1 */
-#define MUX_ACLK_400_MCUISP_SUB_SEL(x)		(((x) & 0x1) << 24)
-#define MUX_ACLK_200_SUB_SEL(x)		(((x) & 0x1) << 20)
-#define MUX_ACLK_266_GPS_SUB_SEL(x)		(((x) & 0x1) << 16)
-#define MUX_MPLL_USER_SEL_T(x)		(((x) & 0x1) << 12)
-#define MUX_ACLK_400_MCUISP_SEL(x)		(((x) & 0x1) << 8)
-#define MUX_ACLK_266_GPS_SEL(x)		(((x) & 0x1) << 4)
-
-/* CLK_MUX_STAT_TOP1 */
-#define ACLK_400_MCUISP_SUB_SEL(x)		(((x) & 0x3) << 24)
-#define ACLK_200_SUB_SEL(x)		(((x) & 0x3) << 20)
-#define ACLK_266_GPS_SUB_SEL(x)		(((x) & 0x3) << 16)
-#define MPLL_USER_SEL_T(x)		(((x) & 0x3) << 12)
-#define ACLK_400_MCUISP_SEL(x)		(((x) & 0x3) << 8)
-#define ACLK_266_GPS_SEL(x)		(((x) & 0x3) << 4)
-
-
-
-
-
-
-/*CLK_DIV_LEFTBUS*/
-#define GDL_RATIO(x)	((x) & 0x7)
-#define GPL_RATIO(x)	(((x) & 0x7) << 4)
-
-#define DIV_STAT_LEFTBUS_CHANGING	(GDL_RATIO(DIV_STAT_CHANGING) | \
-										GPL_RATIO(DIV_STAT_CHANGING) )
-/* CLK_SRC_LEFTBUS */
-#define MUX_MPLL_USER_SEL_L(x)		(((x) & 0x1) << 4)
-#define MUX_GDL_SEL(x)		((x) & 0x1)
-
-/* CLK_MUX_STAT_LEFTBUS */
-#define MPLL_USER_SEL_L(x)		(((x) & 0x3) << 4)
-#define GDL_SEL(x)		((x) & 0x3)
-
-
-/*CLK_DIV_RIGHTBUS*/
-#define GDR_RATIO(x)	((x) & 0x7)
-#define GPR_RATIO(x)	(((x) & 0x7) << 4)
-
-#define DIV_STAT_RIGHTBUS_CHANGING	(GDR_RATIO(DIV_STAT_CHANGING) | \
-								GPR_RATIO(DIV_STAT_CHANGING) )
-
-/* CLK_SRC_RIGHTBUS */
-#define MUX_MPLL_USER_SEL_R(x)		(((x) & 0x1) << 4)
-#define MUX_GDR_SEL(x)		((x) & 0x1)
-
-/* CLK_MUX_STAT_RIGHTBUS */
-#define MPLL_USER_SEL_R(x)		(((x) & 0x3) << 4)
-#define GDR_SEL(x)		((x) & 0x3)
-
-
-
-
-/* Set CLK_SRC_PERIL0 */
-#define UART4_SEL(x)		(((x) & 0xf) << 16)
-#define UART3_SEL(x)		(((x) & 0xf) << 12)
-#define UART2_SEL(x)		(((x) & 0xf) << 8)
-#define UART1_SEL(x)		(((x) & 0xf) << 4)
-#define UART0_SEL(x)		((x) & 0xf)
-
-/* Set CLK_DIV_PERIL0 */
-#define UART4_RATIO(x)		(((x) & 0xf) << 16)
-#define UART3_RATIO(x)		(((x) & 0xf) << 12)
-#define UART2_RATIO(x)		(((x) & 0xf) << 8)
-#define UART1_RATIO(x)		(((x) & 0xf) << 4)
-#define UART0_RATIO(x)		((x) & 0xf)
-
-/* Set CLK_DIV_STAT_PERIL0 */
-#define DIV_UART4(x)		(((x) & 0x1) << 16)
-#define DIV_UART3(x)		(((x) & 0x1) << 12)
-#define DIV_UART2(x)		(((x) & 0x1) << 8)
-#define DIV_UART1(x)		(((x) & 0x1) << 4)
-#define DIV_UART0(x)		((x) & 0x1)
-
-#define DIV_STAT_PERIL0_CHANGING	(DIV_UART4(DIV_STAT_CHANGING) | \
-					DIV_UART3(DIV_STAT_CHANGING) | \
-					DIV_UART2(DIV_STAT_CHANGING) | \
-					DIV_UART1(DIV_STAT_CHANGING) | \
-					DIV_UART0(DIV_STAT_CHANGING))
-
-/* CLK_DIV_FSYS1 */
-#define MMC0_RATIO(x)		((x) & 0xf)
-#define MMC0_PRE_RATIO(x)	(((x) & 0xff) << 8)
-#define MMC1_RATIO(x)		(((x) & 0xf) << 16)
-#define MMC1_PRE_RATIO(x)	(((x) & 0xff) << 24)
-
-/* CLK_DIV_STAT_FSYS1 */
-#define DIV_MMC0(x)		((x) & 1)
-#define DIV_MMC0_PRE(x)		(((x) & 1) << 8)
-#define DIV_MMC1(x)		(((x) & 1) << 16)
-#define DIV_MMC1_PRE(x)		(((x) & 1) << 24)
-
-#define DIV_STAT_FSYS1_CHANGING		(DIV_MMC0(DIV_STAT_CHANGING) | \
-					DIV_MMC0_PRE(DIV_STAT_CHANGING) | \
-					DIV_MMC1(DIV_STAT_CHANGING) | \
-					DIV_MMC1_PRE(DIV_STAT_CHANGING))
-
-/* CLK_DIV_FSYS2 */
-#define MMC2_RATIO(x)		((x) & 0xf)
-#define MMC2_PRE_RATIO(x)	(((x) & 0xff) << 8)
-#define MMC3_RATIO(x)		(((x) & 0xf) << 16)
-#define MMC3_PRE_RATIO(x)	(((x) & 0xff) << 24)
-
-/* CLK_DIV_STAT_FSYS2 */
-#define DIV_MMC2(x)		((x) & 0x1)
-#define DIV_MMC2_PRE(x)		(((x) & 0x1) << 8)
-#define DIV_MMC3(x)		(((x) & 0x1) << 16)
-#define DIV_MMC3_PRE(x)		(((x) & 0x1) << 24)
-
-#define DIV_STAT_FSYS2_CHANGING		(DIV_MMC2(DIV_STAT_CHANGING) | \
-					DIV_MMC2_PRE(DIV_STAT_CHANGING) | \
-					DIV_MMC3(DIV_STAT_CHANGING) | \
-					DIV_MMC3_PRE(DIV_STAT_CHANGING))
-
-/* CLK_DIV_FSYS3 */
-#define MMC4_RATIO(x)		((x) & 0x7)
-#define MMC4_PRE_RATIO(x)	(((x) & 0xff) << 8)
-
-/* CLK_DIV_STAT_FSYS3 */
-#define DIV_MMC4(x)		((x) & 0x1)
-#define DIV_MMC4_PRE(x)		(((x) & 0x1) << 8)
-
-#define DIV_STAT_FSYS3_CHANGING		(DIV_MMC4(DIV_STAT_CHANGING) | \
-					DIV_MMC4_PRE(DIV_STAT_CHANGING))
-
-/* XCL205 GPIO config - Odroid U3 */
-#define XCL205_GPIO_BASE		EXYNOS4X12_GPIO_PART1_BASE
-#define XCL205_EN_GPIO_OFFSET		0x20 /* GPA1 */
-#define XCL205_EN_GPIO_PIN		1
-#define XCL205_EN_GPIO_CON		(XCL205_GPIO_BASE + \
-					 XCL205_EN_GPIO_OFFSET)
-#define XCL205_EN_GPIO_CON_CFG		(S5P_GPIO_OUTPUT << \
-					 4 * XCL205_EN_GPIO_PIN)
-#define XCL205_EN_GPIO_DAT_CFG		(0x1 << XCL205_EN_GPIO_PIN)
-#define XCL205_EN_GPIO_PUD_CFG		(S5P_GPIO_PULL_UP << \
-					 2 * XCL205_EN_GPIO_PIN)
-#define XCL205_EN_GPIO_DRV_CFG		(S5P_GPIO_DRV_4X << \
-					 2 * XCL205_EN_GPIO_PIN)
-
-#define XCL205_STATE_GPIO_OFFSET	0x80 /* GPC1 */
-#define XCL205_STATE_GPIO_PIN		2
-#define XCL205_STATE_GPIO_CON		(XCL205_GPIO_BASE + \
-					 XCL205_STATE_GPIO_OFFSET)
-#define XCL205_STATE_GPIO_DAT		XCL205_STATE_GPIO_CON + 0x4
-#define XCL205_STATE_GPIO_CON_CFG	(S5P_GPIO_INPUT << \
-					4 * XCL205_STATE_GPIO_PIN)
-#define XCL205_STATE_GPIO_PUD_CFG	(S5P_GPIO_PULL_NONE << \
-					 2 * XCL205_STATE_GPIO_PIN)
-
-
-/* DMC */
 #ifdef CONFIG_CLK_800_330_165
 #define DRAM_CLK_330
 #endif
@@ -395,6 +27,372 @@
 /* Bus Configuration Register Address */
 #define ASYNC_CONFIG		0x10010350
 
+/* CLK_SRC_CPU */
+#define MUX_HPM_SEL_MOUTAPLL		0x0
+#define MUX_HPM_SEL_SCLKMPLL		0x1
+#define MUX_CORE_SEL_MOUTAPLL		0x0
+#define MUX_CORE_SEL_SCLKMPLL		0x1
+#define MUX_MPLL_SEL_FILPLL		0x0
+#define MUX_MPLL_SEL_MOUTMPLLFOUT	0x1
+#define MUX_APLL_SEL_FILPLL		0x0
+#define MUX_APLL_SEL_MOUTMPLLFOUT	0x1
+#define CLK_SRC_CPU_VAL			((MUX_HPM_SEL_MOUTAPLL << 20) \
+					| (MUX_CORE_SEL_MOUTAPLL << 16) \
+					| (MUX_MPLL_SEL_MOUTMPLLFOUT << 8)\
+					| (MUX_APLL_SEL_MOUTMPLLFOUT << 0))
+
+/* CLK_DIV_CPU0 */
+#define APLL_RATIO		0x0
+#define PCLK_DBG_RATIO		0x1
+#define ATB_RATIO		0x3
+#define PERIPH_RATIO		0x3
+#define COREM1_RATIO		0x7
+#define COREM0_RATIO		0x3
+#define CORE_RATIO		0x0
+#define CLK_DIV_CPU0_VAL	((APLL_RATIO << 24) \
+				| (PCLK_DBG_RATIO << 20) \
+				| (ATB_RATIO << 16) \
+				| (PERIPH_RATIO << 12) \
+				| (COREM1_RATIO << 8) \
+				| (COREM0_RATIO << 4) \
+				| (CORE_RATIO << 0))
+
+/* CLK_DIV_CPU1 */
+#define HPM_RATIO		0x0
+#define COPY_RATIO		0x3
+#define CLK_DIV_CPU1_VAL	((HPM_RATIO << 4) | (COPY_RATIO))
+
+/* CLK_SRC_DMC */
+#define MUX_PWI_SEL_XXTI		0x0
+#define MUX_PWI_SEL_XUSBXTI		0x1
+#define MUX_PWI_SEL_SCLK_HDMI24M	0x2
+#define MUX_PWI_SEL_SCLK_USBPHY0	0x3
+#define MUX_PWI_SEL_SCLK_USBPHY1	0x4
+#define MUX_PWI_SEL_SCLK_HDMIPHY	0x5
+#define MUX_PWI_SEL_SCLKMPLL		0x6
+#define MUX_PWI_SEL_SCLKEPLL		0x7
+#define MUX_PWI_SEL_SCLKVPLL		0x8
+#define MUX_DPHY_SEL_SCLKMPLL		0x0
+#define MUX_DPHY_SEL_SCLKAPLL		0x1
+#define MUX_DMC_BUS_SEL_SCLKMPLL	0x0
+#define MUX_DMC_BUS_SEL_SCLKAPLL	0x1
+#define CLK_SRC_DMC_VAL			((MUX_PWI_SEL_XUSBXTI << 16) \
+					| (MUX_DPHY_SEL_SCLKMPLL << 8) \
+					| (MUX_DMC_BUS_SEL_SCLKMPLL << 4))
+
+/* CLK_DIV_DMC0 */
+#define CORE_TIMERS_RATIO	0x1
+#define COPY2_RATIO		0x3
+#define DMCP_RATIO		0x1
+#define DMCD_RATIO		0x1
+#define DMC_RATIO		0x1
+#define DPHY_RATIO		0x1
+#define ACP_PCLK_RATIO		0x1
+#define ACP_RATIO		0x3
+#define CLK_DIV_DMC0_VAL	((CORE_TIMERS_RATIO << 28) \
+				| (COPY2_RATIO << 24) \
+				| (DMCP_RATIO << 20) \
+				| (DMCD_RATIO << 16) \
+				| (DMC_RATIO << 12) \
+				| (DPHY_RATIO << 8) \
+				| (ACP_PCLK_RATIO << 4)	\
+				| (ACP_RATIO << 0))
+
+/* CLK_DIV_DMC1 */
+#define DPM_RATIO		0x1
+#define DVSEM_RATIO		0x1
+#define PWI_RATIO		0x1
+#define CLK_DIV_DMC1_VAL	((DPM_RATIO << 24) \
+				| (DVSEM_RATIO << 16) \
+				| (PWI_RATIO << 8))
+
+/* CLK_SRC_TOP0 */
+#define MUX_ONENAND_SEL_ACLK_133	0x0
+#define MUX_ONENAND_SEL_ACLK_160	0x1
+#define MUX_ACLK_133_SEL_SCLKMPLL	0x0
+#define MUX_ACLK_133_SEL_SCLKAPLL	0x1
+#define MUX_ACLK_160_SEL_SCLKMPLL	0x0
+#define MUX_ACLK_160_SEL_SCLKAPLL	0x1
+#define MUX_ACLK_100_SEL_SCLKMPLL	0x0
+#define MUX_ACLK_100_SEL_SCLKAPLL	0x1
+#define MUX_ACLK_200_SEL_SCLKMPLL	0x0
+#define MUX_ACLK_200_SEL_SCLKAPLL	0x1
+#define MUX_VPLL_SEL_FINPLL		0x0
+#define MUX_VPLL_SEL_FOUTVPLL		0x1
+#define MUX_EPLL_SEL_FINPLL		0x0
+#define MUX_EPLL_SEL_FOUTEPLL		0x1
+#define MUX_ONENAND_1_SEL_MOUTONENAND	0x0
+#define MUX_ONENAND_1_SEL_SCLKVPLL	0x1
+#define CLK_SRC_TOP0_VAL		((MUX_ONENAND_SEL_ACLK_133 << 28) \
+					| (MUX_ACLK_133_SEL_SCLKMPLL << 24) \
+					| (MUX_ACLK_160_SEL_SCLKMPLL << 20) \
+					| (MUX_ACLK_100_SEL_SCLKMPLL << 16) \
+					| (MUX_ACLK_200_SEL_SCLKMPLL << 12) \
+					| (MUX_VPLL_SEL_FINPLL << 8) \
+					| (MUX_EPLL_SEL_FINPLL << 4)\
+					| (MUX_ONENAND_1_SEL_MOUTONENAND << 0))
+
+/* CLK_SRC_TOP1 */
+#define VPLLSRC_SEL_FINPLL	0x0
+#define VPLLSRC_SEL_SCLKHDMI24M	0x1
+#define CLK_SRC_TOP1_VAL	(VPLLSRC_SEL_FINPLL)
+
+/* CLK_DIV_TOP */
+#define ONENAND_RATIO		0x0
+#define ACLK_133_RATIO		0x5
+#define ACLK_160_RATIO		0x4
+#define ACLK_100_RATIO		0x7
+#define ACLK_200_RATIO		0x3
+#define CLK_DIV_TOP_VAL		((ONENAND_RATIO << 16)	\
+				| (ACLK_133_RATIO << 12)\
+				| (ACLK_160_RATIO << 8)	\
+				| (ACLK_100_RATIO << 4)	\
+				| (ACLK_200_RATIO << 0))
+
+/* CLK_SRC_LEFTBUS */
+#define MUX_GDL_SEL_SCLKMPLL	0x0
+#define MUX_GDL_SEL_SCLKAPLL	0x1
+#define CLK_SRC_LEFTBUS_VAL	(MUX_GDL_SEL_SCLKMPLL)
+
+/* CLK_DIV_LEFTBUS */
+#define GPL_RATIO		0x1
+#define GDL_RATIO		0x3
+#define CLK_DIV_LEFTBUS_VAL	((GPL_RATIO << 4) | (GDL_RATIO))
+
+/* CLK_SRC_RIGHTBUS */
+#define MUX_GDR_SEL_SCLKMPLL	0x0
+#define MUX_GDR_SEL_SCLKAPLL	0x1
+#define CLK_SRC_RIGHTBUS_VAL	(MUX_GDR_SEL_SCLKMPLL)
+
+/* CLK_DIV_RIGHTBUS */
+#define GPR_RATIO		0x1
+#define GDR_RATIO		0x3
+#define CLK_DIV_RIGHTBUS_VAL	((GPR_RATIO << 4) | (GDR_RATIO))
+
+/* CLK_SRS_FSYS: 6 = SCLKMPLL */
+#define SATA_SEL_SCLKMPLL	0
+#define SATA_SEL_SCLKAPLL	1
+
+#define MMC_SEL_XXTI		0
+#define MMC_SEL_XUSBXTI		1
+#define MMC_SEL_SCLK_HDMI24M	2
+#define MMC_SEL_SCLK_USBPHY0	3
+#define MMC_SEL_SCLK_USBPHY1	4
+#define MMC_SEL_SCLK_HDMIPHY	5
+#define MMC_SEL_SCLKMPLL	6
+#define MMC_SEL_SCLKEPLL	7
+#define MMC_SEL_SCLKVPLL	8
+
+#define MMCC0_SEL		MMC_SEL_SCLKMPLL
+#define MMCC1_SEL		MMC_SEL_SCLKMPLL
+#define MMCC2_SEL		MMC_SEL_SCLKMPLL
+#define MMCC3_SEL		MMC_SEL_SCLKMPLL
+#define MMCC4_SEL		MMC_SEL_SCLKMPLL
+#define CLK_SRC_FSYS_VAL	((SATA_SEL_SCLKMPLL << 24) \
+				| (MMCC4_SEL << 16) \
+				| (MMCC3_SEL << 12) \
+				| (MMCC2_SEL << 8) \
+				| (MMCC1_SEL << 4) \
+				| (MMCC0_SEL << 0))
+
+/* SCLK_MMC[0-4] = MOUTMMC[0-4]/(MMC[0-4]_RATIO + 1)/(MMC[0-4]_PRE_RATIO +1) */
+/* CLK_DIV_FSYS1 */
+#define MMC0_RATIO		0xF
+#define MMC0_PRE_RATIO		0x0
+#define MMC1_RATIO		0xF
+#define MMC1_PRE_RATIO		0x0
+#define CLK_DIV_FSYS1_VAL	((MMC1_PRE_RATIO << 24) \
+				| (MMC1_RATIO << 16) \
+				| (MMC0_PRE_RATIO << 8) \
+				| (MMC0_RATIO << 0))
+
+/* CLK_DIV_FSYS2 */
+#define MMC2_RATIO		0xF
+#define MMC2_PRE_RATIO		0x0
+#define MMC3_RATIO		0xF
+#define MMC3_PRE_RATIO		0x0
+#define CLK_DIV_FSYS2_VAL	((MMC3_PRE_RATIO << 24) \
+				| (MMC3_RATIO << 16) \
+				| (MMC2_PRE_RATIO << 8) \
+				| (MMC2_RATIO << 0))
+
+/* CLK_DIV_FSYS3 */
+#define MMC4_RATIO		0xF
+#define MMC4_PRE_RATIO		0x0
+#define CLK_DIV_FSYS3_VAL	((MMC4_PRE_RATIO << 8) \
+				| (MMC4_RATIO << 0))
+
+/* CLK_SRC_PERIL0 */
+#define UART_SEL_XXTI		0
+#define UART_SEL_XUSBXTI	1
+#define UART_SEL_SCLK_HDMI24M	2
+#define UART_SEL_SCLK_USBPHY0	3
+#define UART_SEL_SCLK_USBPHY1	4
+#define UART_SEL_SCLK_HDMIPHY	5
+#define UART_SEL_SCLKMPLL	6
+#define UART_SEL_SCLKEPLL	7
+#define UART_SEL_SCLKVPLL	8
+
+#define UART0_SEL		UART_SEL_SCLKMPLL
+#define UART1_SEL		UART_SEL_SCLKMPLL
+#define UART2_SEL		UART_SEL_SCLKMPLL
+#define UART3_SEL		UART_SEL_SCLKMPLL
+#define UART4_SEL		UART_SEL_SCLKMPLL
+#define CLK_SRC_PERIL0_VAL	((UART4_SEL << 16) \
+				| (UART3_SEL << 12) \
+				| (UART2_SEL << 8) \
+				| (UART1_SEL << 4) \
+				| (UART0_SEL << 0))
+
+/* SCLK_UART[0-4] = MOUTUART[0-4]/(UART[0-4]_RATIO + 1) */
+/* CLK_DIV_PERIL0 */
+#define UART0_RATIO		7
+#define UART1_RATIO		7
+#define UART2_RATIO		7
+#define UART3_RATIO		7
+#define UART4_RATIO		7
+#define CLK_DIV_PERIL0_VAL	((UART4_RATIO << 16) \
+				| (UART3_RATIO << 12) \
+				| (UART2_RATIO << 8) \
+				| (UART1_RATIO << 4) \
+				| (UART0_RATIO << 0))
+
+/* Clock Source CAM/FIMC */
+/* CLK_SRC_CAM */
+#define CAM0_SEL_XUSBXTI	1
+#define CAM1_SEL_XUSBXTI	1
+#define CSIS0_SEL_XUSBXTI	1
+#define CSIS1_SEL_XUSBXTI	1
+
+#define FIMC_SEL_SCLKMPLL	6
+#define FIMC0_LCLK_SEL		FIMC_SEL_SCLKMPLL
+#define FIMC1_LCLK_SEL		FIMC_SEL_SCLKMPLL
+#define FIMC2_LCLK_SEL		FIMC_SEL_SCLKMPLL
+#define FIMC3_LCLK_SEL		FIMC_SEL_SCLKMPLL
+
+#define CLK_SRC_CAM_VAL		((CSIS1_SEL_XUSBXTI << 28) \
+				| (CSIS0_SEL_XUSBXTI << 24) \
+				| (CAM1_SEL_XUSBXTI << 20) \
+				| (CAM0_SEL_XUSBXTI << 16) \
+				| (FIMC3_LCLK_SEL << 12) \
+				| (FIMC2_LCLK_SEL << 8) \
+				| (FIMC1_LCLK_SEL << 4) \
+				| (FIMC0_LCLK_SEL << 0))
+
+/* SCLK CAM */
+/* CLK_DIV_CAM */
+#define FIMC0_LCLK_RATIO	4
+#define FIMC1_LCLK_RATIO	4
+#define FIMC2_LCLK_RATIO	4
+#define FIMC3_LCLK_RATIO	4
+#define CLK_DIV_CAM_VAL		((FIMC3_LCLK_RATIO << 12) \
+				| (FIMC2_LCLK_RATIO << 8) \
+				| (FIMC1_LCLK_RATIO << 4) \
+				| (FIMC0_LCLK_RATIO << 0))
+
+/* SCLK MFC */
+/* CLK_SRC_MFC */
+#define MFC_SEL_MPLL		0
+#define MOUTMFC_0		0
+#define MFC_SEL			MOUTMFC_0
+#define MFC_0_SEL		MFC_SEL_MPLL
+#define CLK_SRC_MFC_VAL		((MFC_SEL << 8) | (MFC_0_SEL))
+
+
+/* CLK_DIV_MFC */
+#define MFC_RATIO		3
+#define CLK_DIV_MFC_VAL		(MFC_RATIO)
+
+/* SCLK G3D */
+/* CLK_SRC_G3D */
+#define G3D_SEL_MPLL		0
+#define MOUTG3D_0		0
+#define G3D_SEL			MOUTG3D_0
+#define G3D_0_SEL		G3D_SEL_MPLL
+#define CLK_SRC_G3D_VAL		((G3D_SEL << 8) | (G3D_0_SEL))
+
+/* CLK_DIV_G3D */
+#define G3D_RATIO		1
+#define CLK_DIV_G3D_VAL		(G3D_RATIO)
+
+/* SCLK LCD0 */
+/* CLK_SRC_LCD0 */
+#define FIMD_SEL_SCLKMPLL	6
+#define MDNIE0_SEL_XUSBXTI	1
+#define MDNIE_PWM0_SEL_XUSBXTI	1
+#define MIPI0_SEL_XUSBXTI	1
+#define CLK_SRC_LCD0_VAL	((MIPI0_SEL_XUSBXTI << 12) \
+				| (MDNIE_PWM0_SEL_XUSBXTI << 8) \
+				| (MDNIE0_SEL_XUSBXTI << 4) \
+				| (FIMD_SEL_SCLKMPLL << 0))
+
+/* CLK_DIV_LCD0 */
+#define FIMD0_RATIO		4
+#define CLK_DIV_LCD0_VAL	(FIMD0_RATIO)
+
+/* Required period to generate a stable clock output */
+/* PLL_LOCK_TIME */
+#define PLL_LOCKTIME		0x1C20
+
+/* PLL Values */
+#define DISABLE			0
+#define ENABLE			1
+#define SET_PLL(mdiv, pdiv, sdiv)	((ENABLE << 31)\
+					| (mdiv << 16) \
+					| (pdiv << 8) \
+					| (sdiv << 0))
+
+/* APLL_CON0 */
+#define APLL_MDIV		0xFA
+#define APLL_PDIV		0x6
+#define APLL_SDIV		0x1
+#define APLL_CON0_VAL		SET_PLL(APLL_MDIV, APLL_PDIV, APLL_SDIV)
+
+/* APLL_CON1 */
+#define APLL_AFC_ENB		0x1
+#define APLL_AFC		0xC
+#define APLL_CON1_VAL		((APLL_AFC_ENB << 31) | (APLL_AFC << 0))
+
+/* MPLL_CON0 */
+#define MPLL_MDIV		0xC8
+#define MPLL_PDIV		0x6
+#define MPLL_SDIV		0x1
+#define MPLL_CON0_VAL		SET_PLL(MPLL_MDIV, MPLL_PDIV, MPLL_SDIV)
+
+/* MPLL_CON1 */
+#define MPLL_AFC_ENB		0x0
+#define MPLL_AFC		0x1C
+#define MPLL_CON1_VAL		((MPLL_AFC_ENB << 31) | (MPLL_AFC << 0))
+
+/* EPLL_CON0 */
+#define EPLL_MDIV		0x30
+#define EPLL_PDIV		0x3
+#define EPLL_SDIV		0x2
+#define EPLL_CON0_VAL		SET_PLL(EPLL_MDIV, EPLL_PDIV, EPLL_SDIV)
+
+/* EPLL_CON1 */
+#define EPLL_K			0x0
+#define EPLL_CON1_VAL		(EPLL_K >> 0)
+
+/* VPLL_CON0 */
+#define VPLL_MDIV		0x35
+#define VPLL_PDIV		0x3
+#define VPLL_SDIV		0x2
+#define VPLL_CON0_VAL		SET_PLL(VPLL_MDIV, VPLL_PDIV, VPLL_SDIV)
+
+/* VPLL_CON1 */
+#define VPLL_SSCG_EN		DISABLE
+#define VPLL_SEL_PF_DN_SPREAD	0x0
+#define VPLL_MRR		0x11
+#define VPLL_MFR		0x0
+#define VPLL_K			0x400
+#define VPLL_CON1_VAL		((VPLL_SSCG_EN << 31)\
+				| (VPLL_SEL_PF_DN_SPREAD << 29) \
+				| (VPLL_MRR << 24) \
+				| (VPLL_MFR << 16) \
+				| (VPLL_K << 0))
+
+/* DMC */
 #define DIRECT_CMD_NOP	0x07000000
 #define DIRECT_CMD_ZQ	0x0a000000
 #define DIRECT_CMD_CHIP1_SHIFT	(1 << 20)
@@ -435,7 +433,7 @@ struct mem_timings {
 #define ABP_SFR_SLV1_SINGLE_ADDRMAP_START_OFFSET	0x828
 #define ABP_SFR_SLV1_SINGLE_ADDRMAP_END_OFFSET	0x830
 
-#if (defined CONFIG_ORIGEN) || (defined CONFIG_TINY4412)
+#ifdef CONFIG_ORIGEN
 /* Interleave: 2Bit, Interleave_bit1: 0x15, Interleave_bit0: 0x7 */
 #define APB_SFR_INTERLEAVE_CONF_VAL	0x20001507
 #define APB_SFR_ARBRITATION_CONF_VAL	0x00000001
@@ -557,7 +555,7 @@ struct mem_timings {
 
 #define CONTROL2_VAL		0x00000000
 
-#if ((defined CONFIG_ORIGEN) || (defined CONFIG_TINY4412))
+#ifdef CONFIG_ORIGEN
 #define TIMINGREF_VAL		0x000000BB
 #define TIMINGROW_VAL		0x4046654f
 #define	TIMINGDATA_VAL		0x46400506
@@ -575,9 +573,4 @@ struct mem_timings {
 #define	TIMINGPOWER_VAL		0x5444033d
 #endif
 #endif
-
-#ifdef CONFIG_BOARD_TYPES
-extern void sdelay(unsigned long);
-#endif
-
 #endif
