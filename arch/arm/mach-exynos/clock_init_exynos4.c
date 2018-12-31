@@ -47,12 +47,16 @@ void system_clock_init(void)
 
 	sdelay(0x10000);
 
-	writel(0x66666, &clk->src_peril0);
 	writel(0x10, &clk->src_leftbus);
 	writel(0x10, &clk->src_rightbus);
 	writel(0x110, &clk->src_top0);
 	writel(0x1111000, &clk->src_top1);
 	writel(0x00011000, &clk->src_dmc);
+	writel(CLK_SRC_FSYS_VAL, &clk->src_fsys);
+	writel(CLK_SRC_PERIL0_VAL, &clk->src_peril0);
+	writel(CLK_SRC_CAM_VAL, &clk->src_cam);
+	writel(CLK_SRC_MFC_VAL, &clk->src_mfc);
+	writel(CLK_SRC_G3D_VAL, &clk->src_g3d);
 
 	sdelay(0x10000);
 
@@ -60,19 +64,28 @@ void system_clock_init(void)
 	writel(0x506, &clk->div_cpu1);
 	writel(0x111113, &clk->div_dmc0);
 	writel(0x1011713, &clk->div_dmc1);
-	writel(0xfffff, &clk->div_peril0);
-	writel(0x1070107, &clk->div_fsys1);
+	writel(CLK_DIV_FSYS1_VAL, &clk->div_fsys1);
 	writel(0x4070047, &clk->div_fsys2);
-	writel(0x7, &clk->div_fsys3);
+	writel(CLK_DIV_FSYS3_VAL, &clk->div_fsys3);
+	writel(CLK_DIV_PERIL0_VAL, &clk->div_peril0);
+	writel(CLK_DIV_CAM_VAL, &clk->div_cam);
+	writel(CLK_DIV_MFC_VAL, &clk->div_mfc);
+	writel(CLK_DIV_G3D_VAL, &clk->div_g3d);
 
 	/* Set PLL locktime */
 	writel(PLL_LOCKTIME, &clk->apll_lock);
 	writel(PLL_LOCKTIME, &clk->mpll_lock);
+	writel(PLL_LOCKTIME, &clk->epll_lock);
+	writel(PLL_LOCKTIME, &clk->vpll_lock);
 
 	writel(0x803800, &clk->apll_con1);
 	writel(0x80af0300, &clk->apll_con0);
 	writel(0x803800, &clk->mpll_con1);
 	writel(0x80640300, &clk->mpll_con0);
+	writel(EPLL_CON1_VAL, &clk->epll_con1);
+	writel(EPLL_CON0_VAL, &clk->epll_con0);
+	writel(VPLL_CON1_VAL, &clk->vpll_con1);
+	writel(VPLL_CON0_VAL, &clk->vpll_con0);
 
 	sdelay(0x30000);
 }
